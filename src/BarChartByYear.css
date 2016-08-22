@@ -1,0 +1,24 @@
+.Bar {
+  stroke: #C21235;
+  stroke-width: 5px;
+  stroke-linecap: round;
+}
+
+.Axis-line {
+  stroke: #626262;
+  stroke-width: 1px;
+}
+
+.XAxis-label {
+  fill: #5C0919;
+  font-size: 1rem;
+  font-weight: 800;
+  text-anchor: middle;
+}
+
+.YAxis-label {
+  fill: #5C0919;
+  font-size: 1rem;
+  font-weight: 800;
+  text-anchor: middle;
+}

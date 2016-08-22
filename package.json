@@ -1,0 +1,36 @@
+{
+  "name": "dead-on-everest",
+  "version": "0.1.0",
+  "description": "A mobile-first visualization of all the people who have died climbing Mount Everest, according to Wikipedia.",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jebeck/dead-on-everest.git"
+  },
+  "author": "Jana E. Beck",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jebeck/dead-on-everest/issues"
+  },
+  "homepage": "https://github.com/jebeck/dead-on-everest#readme",
+  "devDependencies": {
+    "react-scripts": "0.2.1"
+  },
+  "dependencies": {
+    "d3": "4.2.2",
+    "everest-data": "0.1.1",
+    "lodash": "4.15.0",
+    "moment": "2.14.1",
+    "react": "15.2.1",
+    "react-dimensions": "2.0.0-alpha1",
+    "react-dom": "15.2.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/react-scripts/config/eslint.js"
+  }
+}
