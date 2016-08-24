@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 
 import './App.css';
 
+import history from './history';
+
 import BarChartByYear from './BarChartByYear';
 import DataContainer from './DataContainer';
 import SVGContainer from './SVGContainer';
@@ -18,9 +20,11 @@ class App extends Component {
       stories: [{
         container: null,
         component: Overview,
+        path: '/',
       }, {
         container: SVGContainer,
-        component: BarChartByYear
+        component: BarChartByYear,
+        path: '/by-year'
       }],
       storyIndex: 0,
     };
@@ -28,7 +32,25 @@ class App extends Component {
     this.handleStart = this.handleStart.bind(this);
   }
 
+  componentWillMount() {
+    this.unlisten = history.listen((location) => {
+      const currentStory = _.findIndex(this.state.stories, (story) => {
+        return story.path === location.pathname;
+      });
+      this.setState({
+        storyIndex: currentStory,
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.unlisten();
+  }
+
   handleNext() {
+    history.push({
+      pathname: this.state.stories[this.state.storyIndex + 1].path,
+    });
     this.setState({
       storyIndex: this.state.storyIndex + 1,
     });
