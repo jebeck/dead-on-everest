@@ -33,6 +33,15 @@ class BarChartByYear extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { xScale, yScale } = this.state;
+    const { width, height } = nextProps;
+    this.setState({
+      xScale: xScale.range([0, width]),
+      yScale: yScale.range([height, 0]),
+    });
+  }
+
   render() {
     const { totalsByYear, xScale, yScale } = this.state;
     const xAxisH = yScale.range()[1] - 16;
