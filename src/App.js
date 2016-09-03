@@ -20,11 +20,11 @@ class App extends Component {
       stories: [{
         container: null,
         component: Overview,
-        path: '/',
+        path: '/intro',
       }, {
         container: SVGContainer,
         component: BarChartByYear,
-        path: '/by-year'
+        path: '/by-year',
       }],
       storyIndex: 0,
     };
@@ -57,6 +57,9 @@ class App extends Component {
   }
 
   handleStart() {
+    history.push({
+      pathname: this.state.stories[0].path,
+    });
     this.setState({
       started: true,
     });
