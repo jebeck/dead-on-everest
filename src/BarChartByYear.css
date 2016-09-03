@@ -4,6 +4,10 @@
   stroke-linecap: round;
 }
 
+.Faded {
+  stroke-opacity: 0.25;
+}
+
 .Axis-line {
   stroke: #626262;
   stroke-width: 1px;

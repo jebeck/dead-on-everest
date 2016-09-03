@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import cx from 'classnames';
 import * as d3 from 'd3';
 import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
@@ -8,8 +9,12 @@ import './BarChartByYear.css';
 class BarChartByYear extends Component {
   static propTypes = {
     data: PropTypes.array.isRequired,
-    width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    highlight: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
+    }),
+    width: PropTypes.number.isRequired,
   };
 
   componentWillMount() {
@@ -101,10 +106,15 @@ class BarChartByYear extends Component {
         </g>
         <g id="Bars">
           {_.map(totalsByYear, (d) => {
+            const { highlight } = this.props;
+            const barClasses = highlight ? cx({
+              Bar: true,
+              Faded: !(`year${d.year}` === highlight.id),
+            }) : 'Bar';
             return (
               <line
-                className="Bar"
-                id={`Bar-${d.year}`}
+                className={barClasses}
+                id={`year${d.year}`}
                 key={d.year}
                 x1="0"
                 x2={xScale(d.total)}

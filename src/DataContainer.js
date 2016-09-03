@@ -14,17 +14,21 @@ class DataContainer extends Component {
       Elevation: PropTypes.number,
       'Cause of death details': PropTypes.string
     })).isRequired,
+    highlight: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
+    }),
     toRender: PropTypes.shape({
-      container: PropTypes.func,
       component: PropTypes.func.isRequired,
+      container: PropTypes.func,
     }).isRequired,
   }
   render() {
-    const { toRender: { container: Container, component: Component }, data } = this.props;
+    const { data, highlight, toRender: { component: Component, container: Container } } = this.props;
     if (Container !== null) {
       return (
         <div className="ChartFrame">
-          <Container component={Component} data={data} />
+          <Container component={Component} data={data} highlight={highlight} />
         </div>
       );
     }
