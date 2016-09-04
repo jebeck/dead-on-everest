@@ -26,7 +26,11 @@ class SVGContainer extends Component {
     return (
       <svg width={w} height={h}>
         <g transform={`translate(${left},${top})`}>
-          <Component data={data} height={h - top - bottom} highlight={highlight} width={w - left - right} />
+          <Component
+            data={data}
+            height={h - top - bottom}
+            highlight={highlight}
+            width={w - left - right} />
         </g>
       </svg>
     );

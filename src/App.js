@@ -10,6 +10,7 @@ import BarChartByYear from './BarChartByYear';
 import DataContainer from './DataContainer';
 import SVGContainer from './SVGContainer';
 import Overview from './Overview';
+import TreemapByCountry from './TreemapByCountry';
 
 class App extends Component {
   constructor(props) {
@@ -51,14 +52,24 @@ class App extends Component {
         id: 'year2015',
         text: 'The earthquake in Nepal in April 2015 caused an avalanche at Everest Base Camp, making 2015 the deadliest year to date on the mountain.',
       }],
+    }, {
+      component: TreemapByCountry,
+      container: SVGContainer,
+      margins: {
+        top: 60,
+        right: 5,
+        bottom: 5,
+        left: 5,
+      },
+      path: '/by-country',
     }],
-  }
+  };
 
   static propTypes = {
     data: PropTypes.array.isRequired,
     highlightTimeout: PropTypes.number.isRequired,
     stories: PropTypes.array.isRequired,
-  }
+  };
 
   findHighlightIndex(location, highlights) {
     return _.findIndex(highlights, (highlight) => {

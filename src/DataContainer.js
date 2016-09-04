@@ -24,11 +24,11 @@ class DataContainer extends Component {
     }).isRequired,
   }
   render() {
-    const { data, highlight, toRender: { component: Component, container: Container } } = this.props;
+    const { data, highlight, toRender: { component: Component, container: Container, margins } } = this.props;
     if (Container !== null) {
       return (
         <div className="ChartFrame">
-          <Container component={Component} data={data} highlight={highlight} />
+          <Container component={Component} data={data} highlight={highlight} margins={margins} />
         </div>
       );
     }
