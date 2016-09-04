@@ -8,6 +8,16 @@
   stroke-opacity: 0.25;
 }
 
+.Highlight {
+  stroke-opacity: 1;
+}
+
+.Summit {
+  stroke: #06698F;
+  stroke-width: 3px;
+  stroke-linecap: round;
+}
+
 .Axis-line {
   stroke: #626262;
   stroke-width: 1px;

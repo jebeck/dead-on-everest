@@ -48,9 +48,16 @@ class BarChartByYear extends Component {
   }
 
   render() {
+    const { highlight } = this.props;
     const { totalsByYear, xScale, yScale } = this.state;
     const xAxisH = yScale.range()[1] - 16;
     const yAxisX = xScale.range()[0] - 16;
+
+    const summitClasses = cx({
+      Faded: _.get(highlight, 'id') !== 'year1953',
+      Highlight: _.get(highlight, 'id') === 'year1953',
+      Summit: true,
+    });
     return (
       <g id="BarChartByYear">
         <g id="XAxis">
@@ -104,9 +111,18 @@ class BarChartByYear extends Component {
             transform="rotate(-90)"
           >{totalsByYear[totalsByYear.length - 1].year}</text>
         </g>
+        <g id="SummitBar">
+          <line className={summitClasses}
+            id={`year1953`}
+            key={1953}
+            x1="0"
+            x2={xScale.range()[1]}
+            y1={yScale(1953)}
+            y2={yScale(1953)}
+          />
+        </g>
         <g id="Bars">
           {_.map(totalsByYear, (d) => {
-            const { highlight } = this.props;
             const barClasses = highlight ? cx({
               Bar: true,
               Faded: !(`year${d.year}` === highlight.id),

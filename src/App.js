@@ -26,6 +26,7 @@ class App extends Component {
 
   static defaultProps = {
     data: _.sortBy(data, (d) => { return d.Date; }),
+    highlightTimeout: 4000,
     stories: [{
       component: Overview,
       container: null,
@@ -35,17 +36,27 @@ class App extends Component {
       container: SVGContainer,
       path: '/by-year',
       highlights: [{
-        id: 'year2015',
-        text: '',
+        id: 'year1922',
+        text: 'Records of deaths in attempts to climb Mount Everest start in 1922 with the deaths of seven of the hired Tibetan and Nepalese porters on a Britsh expedition, the first recorded expedition with the aim of reaching the summit of the mountain.',
+      }, {
+        id: 'year1924',
+        text: 'In 1924, the British expedition returned; George Mallory and Andrew Irvine died in a summit attempt. Mallory\'s body was later found on the N.E. ridge, a position that is theoretically compatible with death from a fall after summiting the mountain.',
+      }, {
+        id: 'year1953',
+        text: 'Edmund Hillary and Tenzing Norgay became the first climbers to reach the summit of Mount Everest and return alive.',
       }, {
         id: 'year1996',
-        text: '',
+        text: 'The disastrous 1996 climbing season on Mount Everest was recorded most famously in Jon Krakauer\'s book Into Thin Air.',
+      },{
+        id: 'year2015',
+        text: 'The earthquake in Nepal in April 2015 caused an avalanche at Everest Base Camp, making 2015 the deadliest year to date on the mountain.',
       }],
     }],
   }
 
   static propTypes = {
     data: PropTypes.array.isRequired,
+    highlightTimeout: PropTypes.number.isRequired,
     stories: PropTypes.array.isRequired,
   }
 
@@ -145,7 +156,7 @@ class App extends Component {
       this.setState({
         highlightIndex: newIndex,
       });
-    }, 1000);
+    }, this.props.highlightTimeout);
   }
 
   handleNext() {
@@ -213,6 +224,30 @@ class App extends Component {
     );
   }
 
+  renderHighlight() {
+    const { stories } = this.props;
+    const { highlightIndex, storyIndex } = this.state;
+    const highlight = _.get(stories, [storyIndex, 'highlights', highlightIndex]);
+    if (!highlight) {
+      return null;
+    }
+    const height = this.refs.app.getBoundingClientRect().height;
+    const focusedEl = document.getElementById(highlight.id).getBoundingClientRect();
+    let highlightTextPos = {
+      left: focusedEl.left,
+    };
+    if (focusedEl.top > (height / 2)) {
+      highlightTextPos.bottom = height - focusedEl.top + 5;
+    } else {
+      highlightTextPos.top = focusedEl.top + 5;
+    }
+    return (
+      <div className="Highlight" style={highlightTextPos}>
+        <p>{highlight.text}</p>
+      </div>
+    );
+  }
+
   render() {
     const { highlightIndex, started } = this.state;
     if (started) {
@@ -220,14 +255,15 @@ class App extends Component {
       const { storyIndex } = this.state;
       const highlight = (highlightIndex !== null) ? stories[storyIndex].highlights[highlightIndex] : null;
       return (
-        <section className="App">
+        <section className="App" ref="app">
           <DataContainer data={data} highlight={highlight} toRender={stories[storyIndex]} />
+          {this.renderHighlight()}
           {this.renderNext()}
         </section>
       );
     }
     return (
-      <section className="App">
+      <section className="App" ref="app">
         {this.renderTitle()}
         {this.renderStart()}
         {this.renderImageCredit()}
