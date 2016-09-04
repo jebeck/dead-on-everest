@@ -12,7 +12,7 @@
   "bugs": {
     "url": "https://github.com/jebeck/dead-on-everest/issues"
   },
-  "homepage": "https://github.com/jebeck/dead-on-everest#readme",
+  "homepage": "http://jebeck.github.io/dead-on-everest",
   "devDependencies": {
     "react-scripts": "0.4.1"
   },
