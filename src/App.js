@@ -86,7 +86,13 @@ class App extends Component {
     }
 
     this.unlisten = history.listen((location) => {
-      console.log(location.query);
+      if (location.pathname === '/') {
+        return this.setState({
+          highlightIndex: null,
+          storyIndex: 0,
+          started: false,
+        });
+      }
       const currentStory = this.findStoryIndex(location);
       const highlights = stories[currentStory].highlights;
       if (highlights) {
@@ -101,6 +107,7 @@ class App extends Component {
       }
       this.setState({
         storyIndex: currentStory,
+        started: true,
       });
     });
   }
