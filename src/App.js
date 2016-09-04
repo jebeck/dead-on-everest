@@ -43,7 +43,7 @@ class App extends Component {
         text: 'In 1924, the British expedition returned; George Mallory and Andrew Irvine died in a summit attempt. Mallory\'s body was later found on the N.E. ridge, a position that is theoretically compatible with death from a fall after summiting the mountain.',
       }, {
         id: 'year1953',
-        text: 'Edmund Hillary and Tenzing Norgay became the first climbers to reach the summit of Mount Everest and return alive.',
+        text: 'In 1953, Edmund Hillary and Tenzing Norgay became the first climbers to reach the summit of Mount Everest and return alive.',
       }, {
         id: 'year1996',
         text: 'The disastrous 1996 climbing season on Mount Everest was recorded most famously in Jon Krakauer\'s book Into Thin Air.',
