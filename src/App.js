@@ -280,7 +280,7 @@ class App extends Component {
     }
     if (highlight.position === 'default') {
       return (
-        <div className="Highlight">
+        <div className="Highlight" style={{ top: (height / 2), left: '15%' }}>
           <p>{highlight.text}</p>
         </div>
       );
