@@ -1,3 +1,22 @@
 .TreeRect {
-  fill-opacity: 0.75;
+  fill-opacity: 0.65;
+}
+
+.Faded {
+  fill: gray;
+}
+
+.Highlighted {
+  fill-opacity: 0.9;
+}
+
+.TreeMoji {
+  fill: white;
+  text-anchor: end;
+}
+
+.TreeMojiCenter {
+  dominant-baseline: central;
+  font-size: 1.25rem;
+  text-anchor: middle;
 }

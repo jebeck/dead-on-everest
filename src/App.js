@@ -27,7 +27,7 @@ class App extends Component {
 
   static defaultProps = {
     data: _.sortBy(data, (d) => { return d.Date; }),
-    highlightTimeout: 4000,
+    highlightTimeout: 3000,
     stories: [{
       component: Overview,
       container: null,
@@ -35,7 +35,6 @@ class App extends Component {
     }, {
       component: BarChartByYear,
       container: SVGContainer,
-      path: '/by-year',
       highlights: [{
         id: 'year1922',
         text: 'Records of deaths in attempts to climb Mount Everest start in 1922 with the deaths of seven of the hired Tibetan and Nepalese porters on a Britsh expedition, the first recorded expedition with the aim of reaching the summit of the mountain.',
@@ -52,11 +51,32 @@ class App extends Component {
         id: 'year2015',
         text: 'The earthquake in Nepal in April 2015 caused an avalanche at Everest Base Camp, making 2015 the deadliest year to date on the mountain.',
       }],
+      path: '/by-year',
     }, {
       component: TreemapByCountry,
       container: SVGContainer,
+      highlights: [{
+        id: 'Nepal',
+        text: '🇳🇵 The nation suffering the largest number of deaths on Everest is Nepal, with a total of 111 dead, the majority of them Sherpa hired as porters in service of other expeditions.',
+      }, {
+        id: 'India',
+        position: 'default',
+        text: '🇮🇳 India ranks 2nd in deaths on Everest, including three climbers who died in the 1996 disaster after becoming the first Indians to reach the summit.',
+      }, {
+        id: 'Japan',
+        position: 'default',
+        text: '🇯🇵 Japan ranks 3rd in deaths on Everest, with a total of 19 dead, spanning the years 1970 to 2015.',
+      }, {
+        id: 'United Kingdom',
+        position: 'default',
+        text: '🇬🇧 Unsurprisingly given its long history with Everest, the United Kingdom ranks high in the ranks of death totals on the moutain, with 18 deaths spanning 1922 to 2010.',
+      }, {
+        id: 'United States',
+        position: 'default',
+        text: '🇺🇸 The United States comes in fifth in total deaths on Everest and accounts for 5 of the 17 dead in the 2015 Base Camp avalanche.',
+      }],
       margins: {
-        top: 60,
+        top: 40,
         right: 5,
         bottom: 5,
         left: 5,
@@ -245,12 +265,19 @@ class App extends Component {
     const height = this.refs.app.getBoundingClientRect().height;
     const focusedEl = document.getElementById(highlight.id).getBoundingClientRect();
     let highlightTextPos = {
-      left: focusedEl.left,
+      left: focusedEl.left + 5,
     };
     if (focusedEl.top > (height / 2)) {
       highlightTextPos.bottom = height - focusedEl.top + 5;
     } else {
       highlightTextPos.top = focusedEl.top + 5;
+    }
+    if (highlight.position === 'default') {
+      return (
+        <div className="Highlight">
+          <p>{highlight.text}</p>
+        </div>
+      );
     }
     return (
       <div className="Highlight" style={highlightTextPos}>
