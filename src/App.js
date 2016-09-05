@@ -42,12 +42,18 @@ class App extends Component {
         id: 'year1924',
         text: 'In 1924, the British expedition returned; George Mallory and Andrew Irvine died in a summit attempt. Mallory\'s body was later found on the N.E. ridge, a position that is theoretically compatible with death from a fall after summiting the mountain.',
       }, {
+        id: 'year1934',
+        text: 'British eccentric Maurice Wilson died on Everest in 1934 after sneaking into Tibet to make his attempt. He was an inexperienced climber who made no attempt to learn the necessary skills or even obtain required equipment, such as crampons for walking on glacier ice.',
+      }, {
         id: 'year1953',
         text: 'In 1953, Edmund Hillary and Tenzing Norgay became the first climbers to reach the summit of Mount Everest and return alive.',
       }, {
         id: 'year1996',
         text: 'The disastrous 1996 climbing season on Mount Everest was recorded most famously in Jon Krakauer\'s book Into Thin Air.',
-      },{
+      }, {
+        id: 'year2006',
+        text: '2006 saw both the controversial death of solo British climber David Sharp, passed by many other climbers ascending to and descending from the summit as he slowly died in the Green Boots cave, and the heroic rescue of Lincoln Hall, who against all odds survived a bivouac in the Death Zone and was discovered the next day by a four-person team led by Daniel Mazur of the U.S.; the team abandoned their own summit attempt and organized a rescue team of about a dozen Sherpas to help Hall descend.',
+      }, {
         id: 'year2015',
         text: 'The earthquake in Nepal in April 2015 caused an avalanche at Everest Base Camp, making 2015 the deadliest year to date on the mountain.',
       }],
@@ -73,7 +79,7 @@ class App extends Component {
       }, {
         id: 'United States',
         position: 'default',
-        text: '🇺🇸 The United States comes in fifth in total deaths on Everest and accounts for 5 of the 17 dead in the 2015 Base Camp avalanche.',
+        text: '🇺🇸 The United States comes in fifth in total deaths on Everest and accounts for 5 of the nearly 20 dead in the 2015 Base Camp avalanche.',
       }],
       margins: {
         top: 40,
