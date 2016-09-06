@@ -241,6 +241,17 @@ class App extends Component {
         highlightIndex: newIndex,
         highlightsStarted: false,
       });
+    } else if (highlightIndex === 0 || highlightIndex === null) {
+      const newIndex = storyIndex - 1;
+      history.push({
+        pathname: stories[newIndex].path,
+        query: {},
+      });
+      this.setState({
+        highlightIndex: null,
+        highlightsStarted: false,
+        storyIndex: newIndex,
+      });
     }
   }
 
@@ -250,6 +261,9 @@ class App extends Component {
     if (highlightIndex !== null) {
       clearInterval(this.timer);
       this.timer = null;
+      if (highlightIndex === stories[storyIndex].highlights.length - 1) {
+        return this.handleNext();
+      }
       const newIndex = highlightIndex + 1;
       history.push({
         pathname: history.getCurrentLocation().pathname,
@@ -258,6 +272,10 @@ class App extends Component {
       this.setState({
         highlightIndex: newIndex,
         highlightsStarted: false,
+      });
+    } else if (highlightIndex === null) {
+      this.setState({
+        highlightIndex: 0,
       });
     }
   }
@@ -272,7 +290,10 @@ class App extends Component {
 
   handlePlay() {
     const { stories } = this.props;
-    const { storyIndex } = this.state;
+    const { highlightIndex, storyIndex } = this.state;
+    if (highlightIndex === stories[storyIndex].highlights.length - 1) {
+      return this.handleNext();
+    }
     this.startHighlights(stories[storyIndex], true);
   }
 
@@ -366,12 +387,16 @@ class App extends Component {
         return;
       }
       return (
-        <div id="controls" className="Controls">
-          <FaBackward onClick={this.handleBack} style={{ fontSize: '16px'}} />
+        <div className="Controls">
+          <FaBackward
+            onClick={this.handleBack} style={{ fontSize: '16px'}}
+          />
           {highlightsStarted ?
-            <FaPause onClick={this.handlePause} style={{ padding: '0px 0.5rem' }} /> :
-            <FaPlay onClick={this.handlePlay} style={{ padding: '0px 0.5rem' }} />}
-          <FaForward onClick={this.handleForward} style={{ fontSize: '16px'}} />
+            <FaPause onClick={this.handlePause} /> :
+            <FaPlay onClick={this.handlePlay} />}
+          <FaForward
+            onClick={this.handleForward} style={{ fontSize: '16px'}}
+          />
         </div>
       );
     }
