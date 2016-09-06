@@ -25,6 +25,7 @@
     "react": "15.3.1",
     "react-dimensions": "2.0.0-alpha1",
     "react-dom": "15.3.1",
+    "react-icons": "2.2.1",
     "viewport-units-buggyfill": "0.6.0"
   },
   "scripts": {

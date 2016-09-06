@@ -2,6 +2,11 @@ import _ from 'lodash';
 import data from 'everest-data';
 import React, { Component, PropTypes } from 'react';
 
+import FaBackward from 'react-icons/lib/fa/backward';
+import FaForward from 'react-icons/lib/fa/forward';
+import FaPause from 'react-icons/lib/fa/pause';
+import FaPlay from 'react-icons/lib/fa/play';
+
 import './App.css';
 
 import history from './history';
@@ -12,26 +17,38 @@ import SVGContainer from './SVGContainer';
 import Overview from './Overview';
 import TreemapByCountry from './TreemapByCountry';
 
+const DEAD_ON_EVEREST = '/dead-on-everest';
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       highlightIndex: null,
+      highlightsStarted: false,
       started: false,
       storyIndex: 0,
     };
     this.timer = null;
-    this.handleNext = this.handleNext.bind(this);
+
     this.handleStart = this.handleStart.bind(this);
+    this.handleNext = this.handleNext.bind(this);
+
+    this.handleBack = this.handleBack.bind(this);
+    this.handleForward = this.handleForward.bind(this);
+    this.handlePause = this.handlePause.bind(this);
+    this.handlePlay = this.handlePlay.bind(this);
+
+    this.startHighlights = this.startHighlights.bind(this);
   }
 
   static defaultProps = {
     data: _.sortBy(data, (d) => { return d.Date; }),
-    highlightTimeout: 3000,
+    highlightTimeout: 4000,
+    initialHighlightTimeout: 500,
     stories: [{
       component: Overview,
       container: null,
-      path: '/intro',
+      path: `${DEAD_ON_EVEREST}/intro`,
     }, {
       component: BarChartByYear,
       container: SVGContainer,
@@ -57,7 +74,7 @@ class App extends Component {
         id: 'year2015',
         text: 'The earthquake in Nepal in April 2015 caused an avalanche at Everest Base Camp, making 2015 the deadliest year to date on the mountain.',
       }],
-      path: '/by-year',
+      path: `${DEAD_ON_EVEREST}/by-year`,
     }, {
       component: TreemapByCountry,
       container: SVGContainer,
@@ -87,7 +104,7 @@ class App extends Component {
         bottom: 5,
         left: 5,
       },
-      path: '/by-country',
+      path: `${DEAD_ON_EVEREST}/by-country`,
     }],
   };
 
@@ -110,7 +127,7 @@ class App extends Component {
   }
 
   componentWillMount() {
-    const { stories } = this.props;
+    const { initialHighlightTimeout, stories } = this.props;
     const currentLocation = history.getCurrentLocation();
     const currentStoryIndex = this.findStoryIndex(currentLocation);
     if (currentStoryIndex >= 0) {
@@ -128,7 +145,7 @@ class App extends Component {
         }
       } else {
         if (stories[currentStoryIndex].highlights) {
-          this.startHighlights(stories[currentStoryIndex]);
+          setTimeout(this.startHighlights.bind(null, stories[currentStoryIndex]), initialHighlightTimeout);
         }
       }
     }
@@ -164,13 +181,25 @@ class App extends Component {
     this.unlisten();
   }
 
-  startHighlights(story) {
+  startHighlights(story, restart) {
     const { highlights } = story;
+    const { highlightIndex } = this.state;
+    if (highlightIndex === null || restart) {
+      const newIndex = (highlightIndex === null) ? 0 : (highlightIndex + 1);
+      history.push({
+        pathname: history.getCurrentLocation().pathname,
+        query: { highlight: highlights[newIndex].id },
+      });
+      this.setState({
+        highlightIndex: newIndex,
+        highlightsStarted: true,
+      });
+    }
     this.timer = setInterval(() => {
       const { highlightIndex } = this.state;
       let newIndex = null;
       if (highlightIndex === null) {
-        newIndex = 0;
+        return;
       } else {
         if (highlightIndex < highlights.length) {
           newIndex = highlightIndex + 1;
@@ -192,22 +221,75 @@ class App extends Component {
       }
       this.setState({
         highlightIndex: newIndex,
+        highlightsStarted: true,
       });
     }, this.props.highlightTimeout);
   }
 
-  handleNext() {
+  handleBack() {
     const { stories } = this.props;
+    const { highlightIndex, storyIndex } = this.state;
+    if (highlightIndex > 0) {
+      clearInterval(this.timer);
+      this.timer = null;
+      const newIndex = highlightIndex - 1;
+      history.push({
+        pathname: history.getCurrentLocation().pathname,
+        query: { highlight: stories[storyIndex].highlights[newIndex].id },
+      });
+      this.setState({
+        highlightIndex: newIndex,
+        highlightsStarted: false,
+      });
+    }
+  }
+
+  handleForward() {
+    const { stories } = this.props;
+    const { highlightIndex, storyIndex } = this.state;
+    if (highlightIndex !== null) {
+      clearInterval(this.timer);
+      this.timer = null;
+      const newIndex = highlightIndex + 1;
+      history.push({
+        pathname: history.getCurrentLocation().pathname,
+        query: { highlight: stories[storyIndex].highlights[newIndex].id },
+      });
+      this.setState({
+        highlightIndex: newIndex,
+        highlightsStarted: false,
+      });
+    }
+  }
+
+  handlePause() {
+    clearInterval(this.timer);
+    this.timer = null;
+    this.setState({
+      highlightsStarted: false,
+    });
+  }
+
+  handlePlay() {
+    const { stories } = this.props;
+    const { storyIndex } = this.state;
+    this.startHighlights(stories[storyIndex], true);
+  }
+
+  handleNext() {
+    const { initialHighlightTimeout, stories } = this.props;
     const { storyIndex } = this.state;
     const story = stories[storyIndex + 1];
     history.push({
       pathname: story.path,
     });
     this.setState({
+      highlightIndex: null,
+      highlightsStarted: false,
       storyIndex: storyIndex + 1,
     });
     if (story.highlights) {
-      this.startHighlights(story);
+      setTimeout(this.startHighlights.bind(null, story), initialHighlightTimeout);
     }
   }
 
@@ -245,22 +327,6 @@ class App extends Component {
     );
   }
 
-  renderNext() {
-    const { stories } = this.props;
-    const { highlightIndex, storyIndex, started } = this.state;
-    if (storyIndex === (stories.length - 1)) {
-      return;
-    }
-    if (started && stories[storyIndex].highlights) {
-      if (highlightIndex < (stories[storyIndex].highlights.length)) {
-        return;
-      }
-    }
-    return (
-      <button className="Next" onClick={this.handleNext}>Next</button>
-    );
-  }
-
   renderHighlight() {
     const { stories } = this.props;
     const { highlightIndex, storyIndex } = this.state;
@@ -292,6 +358,42 @@ class App extends Component {
     );
   }
 
+  renderControls() {
+    const { stories } = this.props;
+    const { highlightIndex, highlightsStarted, storyIndex, started } = this.state;
+    if (started && stories[storyIndex].highlights) {
+      if (highlightIndex === (stories[storyIndex].highlights.length)) {
+        return;
+      }
+      return (
+        <div id="controls" className="Controls">
+          <FaBackward onClick={this.handleBack} style={{ fontSize: '16px'}} />
+          {highlightsStarted ?
+            <FaPause onClick={this.handlePause} style={{ padding: '0px 0.5rem' }} /> :
+            <FaPlay onClick={this.handlePlay} style={{ padding: '0px 0.5rem' }} />}
+          <FaForward onClick={this.handleForward} style={{ fontSize: '16px'}} />
+        </div>
+      );
+    }
+    return;
+  }
+
+  renderNext() {
+    const { stories } = this.props;
+    const { highlightIndex, storyIndex, started } = this.state;
+    if (storyIndex === (stories.length - 1)) {
+      return;
+    }
+    if (started && stories[storyIndex].highlights) {
+      if (highlightIndex < (stories[storyIndex].highlights.length)) {
+        return;
+      }
+    }
+    return (
+      <button className="Next" onClick={this.handleNext}>Next</button>
+    );
+  }
+
   render() {
     const { highlightIndex, started } = this.state;
     if (started) {
@@ -302,6 +404,7 @@ class App extends Component {
         <section className="App" ref="app">
           <DataContainer data={data} highlight={highlight} toRender={stories[storyIndex]} />
           {this.renderHighlight()}
+          {this.renderControls()}
           {this.renderNext()}
         </section>
       );
