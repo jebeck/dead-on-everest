@@ -28,3 +28,20 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.Text {
+  line-height: 2.5rem;
+  padding: 1rem;
+}
+
+.MediumText {
+  font-size: 1.25rem;
+  padding: 1rem;
+}
+
+.SmallText {
+  background-color: rgba(255, 255, 255, 0.5);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  padding: 0.5rem 0.75rem;
+}

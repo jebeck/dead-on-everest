@@ -12,7 +12,7 @@ class Overview extends Component {
     const { data } = this.props;
     const firstYear = moment(data[0].Date, 'YYYY-MM-DD').format('YYYY');
     return (
-      <div className="Overview">
+      <div className="Text">
         <p>
           Since the beginning of kept records in <span className="Overview-firstYear">{firstYear}</span>,
           <br/>
